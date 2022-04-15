@@ -89,36 +89,45 @@ void writeIt() {
 
 ////////// 기록된 메모장에서 데이터를 불러와서 총 결과창을 출력
 void readIt() {
-	printf("======================== 롯데월드 ==========================\n");
+	printf("========================== 롯데월드 ==========================\n");
 	char dayOrNightStr[10], typeStr[10], ageStr[10], discountStr[10] ,numberStr[10], priceStr[10];
 	
+	fscanf(fp,"%*s\n"); // 첫줄 스킵 
 	while (fscanf(fp, "%*[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%s\n", &dayOrNightStr, &typeStr, &ageStr, &numberStr, &priceStr, &discountStr) > 0) {
-		printf("%s %s %s X\t%s\t%s원\t 우대적용 %s\n", dayOrNightStr, typeStr, ageStr, numberStr, priceStr, discountStr);
+		printf("%-5s %8s %6s X %-3s %8s원   *우대적용 %-8s\n", dayOrNightStr, typeStr, ageStr, numberStr, priceStr, discountStr);
 	}
 	printf("\n입장료 총액은 %d원 입니다.\n", sum);
-	printf("============================================================");
+	printf("==============================================================");
 }
 
 ////////// 메인함수
 int main() {
-	int keep;
-	fp = fopen("LotteReport.txt", "w");
-	//fprintf(fp, "%s\n", "날짜,시간대,권종,연령구분,수량,가격,우대사항");
+	int anotherOne, anotherOrder;
 	
-	while (keep != 2) {
-		printMenu();
-		age = getAge();
-		price = getPrice();
-		printf("가격은 %d 원 입니다.\n감사합니다.\n\n", price);
-		writeIt();
-		printf("계속 발권 하시겠습니까?\n1. 티켓 발권\n2. 종료\n->");
-		scanf("%d", &keep);		
+	while (anotherOrder != 2) {
+		fp = fopen("LotteReport.txt", "w");
+		fprintf(fp, "%s\n", "날짜,시간대,권종,연령구분,수량,가격,우대사항");
+		
+		anotherOne = 0;
+		while (anotherOne != 2) {
+			printMenu();
+			age = getAge();
+			price = getPrice();
+			printf("가격은 %d 원 입니다.\n감사합니다.\n\n", price);
+			writeIt();
+			printf("계속 발권 하시겠습니까?\n1. 티켓 발권\n2. 종료\n->");
+			scanf("%d", &anotherOne);		
+		}
+		fclose(fp);
+		printf("\n티켓 발권을 종료합니다. 감사합니다.\n\n");
+		
+		fp = fopen("LotteReport.txt", "r");
+		readIt();
+		fclose(fp);
+		
+		printf("\n\n계속 진행 (1: 새로운 주문, 2: 프로그램 종료) : ");
+		scanf("%d", &anotherOrder);
 	}
-	fclose(fp);
-	printf("\n티켓 발권을 종료합니다. 감사합니다.\n\n");
 	
-	fp = fopen("LotteReport.txt", "r");
-	readIt();
-	fclose(fp);
 	return 0;	
 }
