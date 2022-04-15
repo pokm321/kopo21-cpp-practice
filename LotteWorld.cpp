@@ -1,4 +1,4 @@
-// 롯데월드 티켓발급기
+// ***** 롯데월드 티켓발급기 *****
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <time.h>
@@ -77,6 +77,7 @@ int getPrice() {
 	return price;
 }
 
+////////// 하나의 주문이 끝날때마다 메모장에 한줄씩 기록 
 void writeIt() {
 	char const *dayOrNightList[2] = {"주간", "야간"}; // 숫자형태로 저장되어있는 선택지들을 문자열로 바꿔서 기록하기위함 
 	char const *typeList[2] = {"종합이용권", "파크이용권"};
@@ -86,9 +87,10 @@ void writeIt() {
 	fprintf(fp, "%d,%s,%s,%s,%d,%d,%s\n", timeRN, dayOrNightList[dayOrNight - 1], typeList[type - 1], ageList[age], number, price, discountList[discount - 1]);
 }
 
+////////// 기록된 메모장에서 데이터를 불러와서 총 결과창을 출력
 void readIt() {
 	printf("======================== 롯데월드 ==========================\n");
-	char dayOrNightStr[10], typeStr[10], ageStr[10], discountStr[10] ,numberStr[10], priceStr[10]; // 전부 문자열로 바꿔준다. 
+	char dayOrNightStr[10], typeStr[10], ageStr[10], discountStr[10] ,numberStr[10], priceStr[10];
 	
 	while (fscanf(fp, "%*[^,],%[^,],%[^,],%[^,],%[^,],%[^,],%s\n", &dayOrNightStr, &typeStr, &ageStr, &numberStr, &priceStr, &discountStr) > 0) {
 		printf("%s %s %s X\t%s\t%s원\t 우대적용 %s\n", dayOrNightStr, typeStr, ageStr, numberStr, priceStr, discountStr);
@@ -97,6 +99,7 @@ void readIt() {
 	printf("============================================================");
 }
 
+////////// 메인함수
 int main() {
 	int keep;
 	fp = fopen("LotteReport.txt", "w");
